@@ -1,0 +1,38 @@
+{
+  "name": "competency-management",
+  "version": "1.0.0",
+  "description": "competency management system software",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmirDahmouni/Competency-Management.git"
+  },
+  "keywords": [
+    "skills",
+    "projects",
+    "tainings",
+    "quiz"
+  ],
+  "author": "Amir Dahmouni",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AmirDahmouni/Competency-Management/issues"
+  },
+  "homepage": "https://github.com/AmirDahmouni/Competency-Management#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-fileupload": "^1.3.1",
+    "joi": "^17.6.0",
+    "joi-objectid": "^4.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.2.8",
+    "nodemon": "^2.0.15",
+    "path": "^0.12.7"
+  }
+}
