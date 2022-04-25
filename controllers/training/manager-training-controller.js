@@ -12,15 +12,13 @@ exports.getAlltrainings=async(req,res,next)=>{
        if(trainings.length==0) return res.status(200).send({message:"no scheduled training"})
 
        return res.status(200).send({message:"training list",data:trainings})
-
-
     }
     catch(ex)
     {
         next(ex)
     }
 }
-exports.getMyTrainings=async(eq,res,next)=>{
+exports.getMyTrainings=async(req,res,next)=>{
     try{
        let trainings=await Training.find({trainer:req.user._id}).populate("quiz").populate("interested_members")
        if(!trainings) return res.status(400).send({error:"faield fetching trainings"})
@@ -93,11 +91,11 @@ exports.newTraining=async(req,res,next)=>{
        //trainer notification
        let notificationTrainer=new Notification({title:"your are invited to organise a training",type:"training",notification:training._id})
        await notificationTrainer.save()
-       trainer=await User.findByIdAndUpdate(req.body.trainer,{$push:{trainings:training._id},$push:{notifications:notificationTrainer._id}})
+       trainer=await User.findByIdAndUpdate(req.body.trainer,{$push:{trainings:training._id,notifications:notificationTrainer._id},busy:true})
        if(!trainer) return res.status(404).send({error:"failed to notify trainer"})
 
        //developers notification
-       let notificationDevelopers=new new Notification({title:"new training is going to be held",type:"training",notification:training._id})
+       let notificationDevelopers=new Notification({title:"new training is going to be held",type:"training",notification:training._id})
        await notificationDevelopers.save()
        let developers=await User.updateMany({_id:{$ne:req.body.trainer}},{$push:{notifications:notificationDevelopers._id}})
        if(!developers) return res.status(404).send({error:"failed to notify developers"})
@@ -154,7 +152,9 @@ exports.closeTraining=async(req,res,next)=>{
 }
 exports.markPresence=async(req,res,next)=>{
     try{
-       let training=await Training.findByIdAndUpdate(req.params.id,{$push:{presences:req.body.presences},$push:{absences:req.body.absences}},{new:true})
+       let training=await Training.findByIdAndUpdate(req.params.id,{
+           $push:{presences:req.body.presences},
+           $push:{absences:req.body.absences}},{new:true})
        if(!training) return res.status(400).send({error:"failed mark presences"})
        return res.status(200).send({message:"success mark presences",data:training})
     }

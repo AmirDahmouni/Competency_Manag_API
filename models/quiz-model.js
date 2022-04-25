@@ -13,6 +13,7 @@ const questionSchema = new mongoose.Schema({
 const quizSchema = new mongoose.Schema({
   subject: { type: String, required: true },
   deadline:{type:Date,required:true},
+  training:{type:mongoose.Schema.Types.ObjectId,ref:"Quiz",required:true},
   questions:[questionSchema]
 });
 

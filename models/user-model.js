@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
   quiz:[{
     quiz:{ type:mongoose.Schema.Types.ObjectId,ref:"Quiz",required:false},
     mark:{type:Number,default:0},
-    status:{type:String,enum:["passed","ignored"]} 
+    status:{type:String,enum:["not yet","passed","ignored"]} 
   }],
   notifications:[{type:mongoose.Schema.Types.ObjectId,ref:"Notification"}]
 });

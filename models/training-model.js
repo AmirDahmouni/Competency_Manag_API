@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const trainingSchema = new mongoose.Schema({
-  date_begin:{type:Date,required:true},
+  date_begin:{type:Date,required:true,default:Date.now},
   subject: {type: String, required: true, unique: true},
   description:{type:String,required:false,default:""},
   room:{type:String,required:true,default:"",enum:["A10","A20","A30","A40","A50","A60","A70","A80","A90"]},

@@ -37,6 +37,8 @@ app.use("/certificate",require("./routes/certificat-router"))
 app.use("/client",require("./routes/client-router"))
 app.use("/project",require("./routes/project-router"))
 app.use("/mission",require("./routes/mission-router"))
+app.use("/training",require("./routes/training-router"))
+app.use("/quiz",require("./routes/quiz-router"))
 
 const port = process.env.PORT || 5500;
 app.listen(port, () => {
