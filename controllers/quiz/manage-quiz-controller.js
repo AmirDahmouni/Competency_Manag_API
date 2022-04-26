@@ -19,7 +19,7 @@ exports.getMyQuiz=async(req,res,next)=>{
 exports.getAllQuiz=async(req,res,next)=>{
     try
     {
-        let quiz=await Quiz.find().populate("training")
+        let quiz=await Quiz.find().populate("training").populate("technology")
         if(!quiz) return res.status(400).send({error:"error fetching quiz"})
 
         if(quiz.length==0) return res.status(200).send({message:"no quiz found"})
@@ -35,7 +35,7 @@ exports.getAllQuiz=async(req,res,next)=>{
 
 exports.getQuiz=async(req,res)=>{
     try{
-        let quiz=await Quiz.findById(req.params.id).populate("training")
+        let quiz=await Quiz.findById(req.params.id).populate("training").populate("technology")
         if(!quiz) return res.status(400).send({error:"error fetching quiz"})
 
         return res.status(200).send({message:"quiz found",data:quiz})
@@ -52,7 +52,8 @@ exports.newQuiz=async(req,res,next)=>{
        var quiz=await Quiz.findOne({
            subject:req.body.subject,
            deadline:req.body.deadline,
-           training:req.body.training
+           training:req.body.training,
+           technology:req.body.technology
         })
         if(quiz) return res.status(400).send({error:"quiz already exist"})
 
@@ -60,7 +61,8 @@ exports.newQuiz=async(req,res,next)=>{
             subject:req.body.subject,
            deadline:req.body.deadline,
            training:req.body.training,
-           questions:req.body.questions
+           questions:req.body.questions,
+           technology:req.body.technology
         })
         
         let training=await Training.findOneAndUpdate({_id:req.body.training,status:"closed"},{quiz:quiz._id},{new:true})

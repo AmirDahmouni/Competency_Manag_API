@@ -3,7 +3,7 @@ const jwt=require('jsonwebtoken');
 const Joi = require('joi');
 
 const JoiObjectId=require("joi-objectid");
-const myJoiObjectId = JoiObjectId(Joi);
+
 
 
 const userSchema = new mongoose.Schema({
