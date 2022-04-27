@@ -48,37 +48,41 @@ exports.getQuiz=async(req,res)=>{
 }
 
 exports.newQuiz=async(req,res,next)=>{
-    try{
+    try
+    {
+       let training=await Training.findOne({_id:req.body.training,trainer:req.user._id})
+       if(!training) return res.status(403).send({error:"Your are not the trainer"})
+
        var quiz=await Quiz.findOne({
            subject:req.body.subject,
            deadline:req.body.deadline,
            training:req.body.training,
            technology:req.body.technology
         })
-        if(quiz) return res.status(400).send({error:"quiz already exist"})
+        if(quiz) return res.status(400).send({error:"Quiz already exist"})
 
         quiz=new Quiz({
-            subject:req.body.subject,
+           subject:req.body.subject,
            deadline:req.body.deadline,
            training:req.body.training,
            questions:req.body.questions,
            technology:req.body.technology
         })
         
-        let training=await Training.findOneAndUpdate({_id:req.body.training,status:"closed"},{quiz:quiz._id},{new:true})
-        if(!training) return res.status(400).send({error:"error updating training"})
+        training=await Training.findOneAndUpdate({_id:req.body.training,status:"closed"},{quiz:quiz._id},{new:true})
+        if(!training) return res.status(400).send({error:"Error updating training"})
 
-        let users=await User.updateMany({_id:{$in:training.presences}},{$push:{quiz:{quiz:quiz._id,mark:0,status:"not yet"}}})
-        if(!users) return res.status(400).send({error:"error updating users"})
-
-        let notifications=new Notification({title:"new Quiz started and you invited to paricipate",type:"quiz",notification:quiz._id})
+        let notifications=new Notification({title:"New Quiz started and you invited to paricipate",type:"quiz",notification:quiz._id})
         await notifications.save()
-        let developers=await User.updateMany({_id:{$in:training.presences}},{$push:{notifications:notifications._id}})
-        if(!developers) return res.status(404).send({error:"failed to notify users"})
+
+        let users=await User.updateMany({_id:{$in:training.presences}},
+                                        {$push:{quiz:{quiz:quiz._id,mark:0,status:"not yet"},notifications:notifications._id}})
+
+        if(!users) return res.status(400).send({error:"Error updating users"})
 
         quiz=await quiz.save()
-        if(quiz) return res.status(201).send({message:"create new quiz success",data:quiz})
-        return res.status(400).send({error:"failed create new quiz"})
+        if(quiz) return res.status(201).send({message:"Create new quiz success",data:quiz})
+        return res.status(400).send({error:"Failed create new quiz"})
 
     }
     catch(ex)

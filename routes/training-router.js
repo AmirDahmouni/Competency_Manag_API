@@ -13,9 +13,10 @@ router.get("/:id",validateObjectId,checkAuth,trainingManagerController.getTraini
 router.post("/newTraining",checkAuth,checkAdmin,trainingManagerController.newTraining,error)
 router.put("/closeTraining",checkAuth,trainingManagerController.closeTraining,error)
 router.put("/cancelTraining",checkAuth,checkAdmin,trainingManagerController.cancelTraining,error)
-router.put("/interest",checkAuth,trainingManagerController.interestTraining,error)
+router.put("/markPresence/:id",validateObjectId,checkAuth,trainingManagerController.markPresence,error)
+router.put("/interest/:id",validateObjectId,checkAuth,trainingManagerController.interestTraining,error)
 router.put("/start/:id",validateObjectId,checkAuth,trainingManagerController.startTraining,error)
-router.put("/markPresence",checkAuth,trainingManagerController.markPresence,error)
+
 
 
 

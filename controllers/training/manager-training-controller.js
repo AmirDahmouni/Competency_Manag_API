@@ -76,7 +76,7 @@ exports.newTraining=async(req,res,next)=>{
     try
     {
        let training=await Training.findOne({subject:req.body.subject,description:req.body.description,trainer:req.body.trainer})
-       if(training) return res.status(400).send({eror:"trainings already exist"})
+       if(training) return res.status(400).send({error:"Training already exist"})
 
        training=new Training({
           subject:req.body.subject,
@@ -152,9 +152,11 @@ exports.closeTraining=async(req,res,next)=>{
 }
 exports.markPresence=async(req,res,next)=>{
     try{
-       let training=await Training.findByIdAndUpdate(req.params.id,{
-           $push:{presences:req.body.presences},
-           $push:{absences:req.body.absences}},{new:true})
+       let training=await Training.findOneAndUpdate({_id:req.params.id,trainer:req.user._id},
+        {
+           presences:req.body.presences,
+           absences:req.body.absences
+        },{new:true})
        if(!training) return res.status(400).send({error:"failed mark presences"})
        return res.status(200).send({message:"success mark presences",data:training})
     }

@@ -10,7 +10,7 @@ const technologySchema = new mongoose.Schema({
       "Mobile Developpement",
       "Machine Learning",
       "Data Scientist",
-      "Devops",
+      "DevOps",
       "Cloud Developpement",
       "Webdesign",
       "Cybersecurity",
