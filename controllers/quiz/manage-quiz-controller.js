@@ -91,3 +91,34 @@ exports.newQuiz=async(req,res,next)=>{
     }
 }
 
+exports.passQuiz=async(req,res,next)=>{
+    
+    function getScoreAnswer(idQuestion,idAnswer,quiz)
+    {
+       return quiz.questions.find(elem=>elem._id==idQuestion).answers.find(elem=>elem._id==idAnswer).score
+    }
+    try
+    {
+      let quiz=await Quiz.findById(req.params.id)
+      let answers=req.body.answers.map(item=>item.answers.map(answer=>getScoreAnswer(item.question,answer,quiz)))
+      var score=0
+      answers.map(item=>{
+          if(!item.some(elem=>elem==0)) score+=item.reduce((a,b)=>a+b,0)
+      })
+      let user=await User.findById(req.user._id)
+      
+      user.quiz=user.quiz.map(item=>{
+          if (item.quiz==req.params.id) return {...item,mark:score,status:"passed"}
+          else return item
+      })
+      await user.save()
+      
+
+      return res.status(200).send({message:"quiz passed"})
+    }
+    catch(ex)
+    {
+        next(ex)
+    }
+}
+

@@ -11,5 +11,6 @@ router.get("/",checkAuth,checkAdmin,quizManagerController.getAllQuiz,error)
 router.get("/:id",validateObjectId,checkAuth,quizManagerController.getQuiz,error)
 router.get("/getMyQuiz",checkAuth,quizManagerController.getMyQuiz,error)
 router.post("/newQuiz",checkAuth,quizManagerController.newQuiz,error)
+router.put("/passQuiz/:id",validateObjectId,checkAuth,quizManagerController.passQuiz,error)
 
 module.exports = router;
